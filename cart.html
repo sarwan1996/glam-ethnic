@@ -36,7 +36,10 @@
     <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
   </footer>
 
+  <!-- ✅ Shared cart functions -->
   <script src="script.js"></script>
+
+  <!-- ✅ Cart Page Logic -->
   <script>
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     const cartItemsDiv = document.getElementById('cartItems');
@@ -51,13 +54,14 @@
 
       let total = 0;
       cartItemsDiv.innerHTML = cart.map((item, index) => {
-        total += item.price * item.qty;
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
         return `
           <div class="cart-item">
             <img src="${item.image || 'images/default.jpg'}" alt="${item.title}" width="80">
             <div>
               <h4>${item.title}</h4>
-              <p>₹${item.price} x ${item.qty}</p>
+              <p>₹${item.price} x ${item.qty} = ₹${itemTotal}</p>
               <button onclick="changeQty(${index}, 1)">+</button>
               <button onclick="changeQty(${index}, -1)">-</button>
               <button onclick="removeItem(${index})">Remove</button>
@@ -86,8 +90,22 @@
 
     document.getElementById('checkoutForm').addEventListener('submit', function(e) {
       e.preventDefault();
+
+      const order = {
+        name: document.getElementById('name').value,
+        address: document.getElementById('address').value,
+        phone: document.getElementById('phone').value,
+        items: cart,
+        time: new Date().toLocaleString()
+      };
+
+      let orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders.push(order);
+      localStorage.setItem('orders', JSON.stringify(orders));
+
       alert('Order placed successfully!');
       localStorage.removeItem('cart');
+      updateCartCount();
       window.location.href = 'products.html';
     });
 

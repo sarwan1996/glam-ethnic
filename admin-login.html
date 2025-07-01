@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Admin Login</h1>
+    <form onsubmit="adminLogin(event)">
+      <label>Password: <input type="password" id="adminPass"></label>
+      <button type="submit">Login</button>
+    </form>
+  </main>
+  <script>
+    function adminLogin(e) {
+      e.preventDefault();
+      const pass = document.getElementById('adminPass').value;
+      if (pass === 'admin123') {
+        alert('Login successful!');
+        location.href = 'orders.html';
+      } else {
+        alert('Incorrect password.');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -39,12 +39,12 @@
     <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
   </footer>
 
-  <!-- Load shared script for cart logic and count -->
+  <!-- Shared cart logic -->
   <script src="script.js"></script>
 
   <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
     const cartItemsDiv = document.getElementById('cartItems');
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     function displayCart() {
       if (cart.length === 0) {
@@ -52,26 +52,40 @@
         return;
       }
 
-      cartItemsDiv.innerHTML = cart.map(item => `
+      cartItemsDiv.innerHTML = cart.map((item, index) => `
         <div class="cart-item">
           <img src="${item.image}" alt="${item.title}" width="80">
           <div>
             <h4>${item.title}</h4>
             <p>₹${item.price}</p>
+            <button onclick="removeItem(${index})">Remove</button>
           </div>
         </div>
       `).join('');
     }
 
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      displayCart();
+    }
+
     document.getElementById('checkoutForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
       alert('Order placed successfully!');
       localStorage.removeItem('cart');
-      updateCartCount(); // Update cart count after clearing
+      updateCartCount();
       window.location.href = 'products.html';
     });
 
-    document.addEventListener('DOMContentLoaded', displayCart);
+    document.addEventListener('DOMContentLoaded', () => {
+      displayCart();
+    });
   </script>
 </body>
 </html>

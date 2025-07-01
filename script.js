@@ -1,20 +1,15 @@
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 function addToCart(title, price, image) {
-  const existing = cart.find(item => item.title === title);
-  if (existing) {
-    existing.quantity += 1;
-  } else {
-    cart.push({ title, price, image, quantity: 1 });
-  }
+  cart.push({ title, price, image });
   localStorage.setItem('cart', JSON.stringify(cart));
   updateCartCount();
 }
 
 function updateCartCount() {
-  const total = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const count = cart.length;
   const el = document.getElementById('cart-count');
-  if (el) el.innerText = total;
+  if (el) el.innerText = count;
 }
 
 document.addEventListener('DOMContentLoaded', updateCartCount);

@@ -1,10 +1,9 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Glam Ethnic - Home</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
@@ -14,19 +13,24 @@
       <a href="products.html?category=saree">Sarees</a>
       <a href="products.html?category=chudi">Chudi</a>
       <a href="cart.html">Cart <span id="cart-count">0</span></a>
-      <a href="admin-login.html">Admin</a>
     </nav>
   </header>
-
-  <section class="hero">
-    <h2>Elegant Ethnic Wear for Every Occasion</h2>
-    <p>Explore our latest collection of Sarees and Chudi sets.</p>
-    <a href="products.html" class="btn">Shop Now</a>
-  </section>
-
+  <main>
+    <section class="hero">
+      <h2>Welcome to Glam Ethnic</h2>
+      <p>Discover your perfect traditional outfit today!</p>
+    </section>
+    <section class="featured">
+      <h3>Featured Products</h3>
+      <div id="featured-products" class="product-grid"></div>
+    </section>
+  </main>
   <footer>
-    <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
+    <p>&copy; 2025 Glam Ethnic</p>
   </footer>
   <script src="script.js"></script>
+  <script>
+    renderProducts('saree', 2, 'featured-products');
+  </script>
 </body>
 </html>

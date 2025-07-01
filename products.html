@@ -38,7 +38,7 @@
           <h3>${product.title}</h3>
           <p>₹${product.price}</p>
           <p>Category: ${product.category}</p>
-          <button onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+          <button onclick="addToCart('Silk Saree', 1499, 'images/saree1.jpg')">Add to Cart</button>
         `;
         productDisplay.appendChild(div);
       });

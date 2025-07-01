@@ -17,58 +17,69 @@
     </nav>
   </header>
 
-  <main class="products">
-    <!-- Sarees -->
-    <div class="product-card">
-      <img src="images/saree1.jpg" alt="Silk Saree">
-      <h3>Silk Saree</h3>
-      <p>₹1,499</p>
-      <button onclick='addToCart({
-        title: "Silk Saree",
-        price: 1499,
-        image: "images/saree1.jpg"
-      })'>Add to Cart</button>
-    </div>
-
-    <div class="product-card">
-      <img src="images/saree2.jpg" alt="Floral Ruffle Saree">
-      <h3>Floral Ruffle Saree</h3>
-      <p>₹1,899</p>
-      <button onclick='addToCart({
-        title: "Floral Ruffle Saree",
-        price: 1899,
-        image: "images/saree2.jpg"
-      })'>Add to Cart</button>
-    </div>
-
-    <!-- Chudi -->
-    <div class="product-card">
-      <img src="images/chudi1.jpg" alt="Designer Chudi">
-      <h3>Designer Chudi</h3>
-      <p>₹999</p>
-      <button onclick='addToCart({
-        title: "Designer Chudi",
-        price: 999,
-        image: "images/chudi1.jpg"
-      })'>Add to Cart</button>
-    </div>
-
-    <div class="product-card">
-      <img src="images/chudi2.jpg" alt="Cotton Chudi Set">
-      <h3>Cotton Chudi Set</h3>
-      <p>₹799</p>
-      <button onclick='addToCart({
-        title: "Cotton Chudi Set",
-        price: 799,
-        image: "images/chudi2.jpg"
-      })'>Add to Cart</button>
-    </div>
-  </main>
+  <main class="products" id="product-list"></main>
 
   <footer>
     <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    const allProducts = [
+      {
+        title: "Silk Saree",
+        price: 1499,
+        image: "images/saree1.jpg",
+        category: "saree"
+      },
+      {
+        title: "Floral Ruffle Saree",
+        price: 1899,
+        image: "images/saree2.jpg",
+        category: "saree"
+      },
+      {
+        title: "Designer Chudi",
+        price: 999,
+        image: "images/chudi1.jpg",
+        category: "chudi"
+      },
+      {
+        title: "Cotton Chudi Set",
+        price: 799,
+        image: "images/chudi2.jpg",
+        category: "chudi"
+      }
+    ];
+
+    function getCategoryFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('category'); // saree, chudi, or null
+    }
+
+    function renderProducts(category) {
+      const container = document.getElementById('product-list');
+      const filtered = category ? allProducts.filter(p => p.category === category) : allProducts;
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p>No products found in this category.</p>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(product => `
+        <div class="product-card">
+          <img src="${product.image}" alt="${product.title}">
+          <h3>${product.title}</h3>
+          <p>₹${product.price}</p>
+          <button onclick="addToCart('${product.title}', ${product.price}, '${product.image}')">Add to Cart</button>
+        </div>
+      `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const category = getCategoryFromURL();
+      renderProducts(category);
+    });
+  </script>
 </body>
 </html>

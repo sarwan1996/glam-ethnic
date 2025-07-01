@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Glam Ethnic - Orders</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Order History</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="products.html">Shop</a>
+    </nav>
+  </header>
+
+  <main>
+    <div id="orderList"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const orderListDiv = document.getElementById('orderList');
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+    if (orders.length === 0) {
+      orderListDiv.innerHTML = '<p>No orders placed yet.</p>';
+    } else {
+      orderListDiv.innerHTML = orders.map((order, i) => `
+        <div class="order-card">
+          <h3>Order #${i + 1}</h3>
+          <p><strong>Name:</strong> ${order.name}</p>
+          <p><strong>Phone:</strong> ${order.phone}</p>
+          <p><strong>Address:</strong> ${order.address}</p>
+          <p><strong>Time:</strong> ${order.time}</p>
+          <h4>Items:</h4>
+          <ul>
+            ${order.items.map(item => `
+              <li>${item.title} - ₹${item.price} x ${item.qty}</li>
+            `).join('')}
+          </ul>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

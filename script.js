@@ -1,29 +1,30 @@
+const products = [
+  {
+    title: "Silk Saree",
+    price: 1499,
+    image: "images/silk.jpg",
+    category: "saree"
+  },
+  {
+    title: "Floral Ruffle Saree",
+    price: 1899,
+    image: "images/floral.jpg",
+    category: "saree"
+  },
+  {
+    title: "Printed Cotton Chudi",
+    price: 1299,
+    image: "images/chudi.jpg",
+    category: "chudi"
+  }
+];
+
 function renderProducts(category, limit, targetId) {
-  const products = [
-    {
-      title: "Silk Saree",
-      price: 1499,
-      image: "images/silk.jpg",
-      category: "saree"
-    },
-    {
-      title: "Floral Ruffle Saree",
-      price: 1899,
-      image: "images/floral.jpg",
-      category: "saree"
-    },
-    {
-      title: "Chudi Set",
-      price: 1299,
-      image: "images/chudi.jpg",
-      category: "chudi"
-    }
-  ];
-
   const container = document.getElementById(targetId);
-  const filtered = products.filter(p => p.category === category).slice(0, limit);
+  const filtered = products.filter(p => p.category === category);
+  const selected = limit ? filtered.slice(0, limit) : filtered;
 
-  container.innerHTML = filtered.map(p => `
+  container.innerHTML = selected.map(p => `
     <div class="product-card">
       <img src="${p.image}" alt="${p.title}">
       <h4>${p.title}</h4>
@@ -48,7 +49,7 @@ function addToCart(title, price, image) {
 function updateCartCount() {
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
   const count = cart.reduce((acc, item) => acc + item.qty, 0);
-  document.getElementById('cart-count').innerText = count;
+  document.getElementById("cart-count").innerText = count;
 }
 
 updateCartCount();

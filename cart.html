@@ -1,4 +1,3 @@
-<!-- cart.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,11 +9,15 @@
   <header>
     <h1>Your Cart</h1>
     <nav>
-      <a href="products.html">Back to Shop</a>
+      <a href="index.html">Home</a>
+      <a href="products.html?category=saree">Sarees</a>
+      <a href="products.html?category=chudi">Chudi</a>
+      <a href="cart.html">Cart <span id="cart-count">0</span></a>
     </nav>
   </header>
 
   <main>
+    <h2>Items in Cart</h2>
     <div id="cartItems"></div>
 
     <h2>Shipping Information</h2>
@@ -35,6 +38,9 @@
   <footer>
     <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
   </footer>
+
+  <!-- Load shared script for cart logic and count -->
+  <script src="script.js"></script>
 
   <script>
     const cartItemsDiv = document.getElementById('cartItems');
@@ -61,10 +67,11 @@
       e.preventDefault();
       alert('Order placed successfully!');
       localStorage.removeItem('cart');
+      updateCartCount(); // Update cart count after clearing
       window.location.href = 'products.html';
     });
 
-    displayCart();
+    document.addEventListener('DOMContentLoaded', displayCart);
   </script>
 </body>
 </html>

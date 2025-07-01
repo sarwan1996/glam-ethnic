@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Glam Ethnic - Cart</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <h1>Your Cart</h1>
     <nav>
       <a href="products.html">Back to Shop</a>
+      <a href="admin-login.html">Admin Login</a>
     </nav>
   </header>
 
@@ -20,94 +21,90 @@
     <h2>Shipping Information</h2>
     <form id="checkoutForm">
       <label for="name">Full Name:</label>
-      <input type="text" id="name" required>
+      <input type="text" id="name" required />
 
       <label for="address">Address:</label>
       <textarea id="address" required></textarea>
 
       <label for="phone">Phone:</label>
-      <input type="tel" id="phone" required>
+      <input type="tel" id="phone" required />
 
       <button type="submit">Place Order</button>
     </form>
+
+    <button onclick="printInvoice()">🖨️ Print Invoice</button>
   </main>
 
   <footer>
     <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
   </footer>
 
-  <!-- ✅ Shared cart functions -->
-  <script src="script.js"></script>
-
-  <!-- ✅ Cart Page Logic -->
   <script>
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const cartItemsDiv = document.getElementById('cartItems');
-    const cartTotal = document.getElementById('cartTotal');
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartItemsDiv = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
 
     function displayCart() {
       if (cart.length === 0) {
-        cartItemsDiv.innerHTML = '<p>Your cart is empty.</p>';
-        cartTotal.innerText = 'Total: ₹0';
+        cartItemsDiv.innerHTML = "<p>Your cart is empty.</p>";
+        cartTotal.innerText = "Total: ₹0";
         return;
       }
 
       let total = 0;
-      cartItemsDiv.innerHTML = cart.map((item, index) => {
-        const itemTotal = item.price * item.qty;
-        total += itemTotal;
-        return `
-          <div class="cart-item">
-            <img src="${item.image || 'images/default.jpg'}" alt="${item.title}" width="80">
-            <div>
-              <h4>${item.title}</h4>
-              <p>₹${item.price} x ${item.qty} = ₹${itemTotal}</p>
-              <button onclick="changeQty(${index}, 1)">+</button>
-              <button onclick="changeQty(${index}, -1)">-</button>
-              <button onclick="removeItem(${index})">Remove</button>
+      cartItemsDiv.innerHTML = cart
+        .map((item, index) => {
+          total += item.price * item.qty;
+          return `
+            <div class="cart-item">
+              <img src="${item.image || 'images/default.jpg'}" alt="${item.title}" width="80" />
+              <div>
+                <h4>${item.title}</h4>
+                <p>₹${item.price} × ${item.qty}</p>
+                <button onclick="changeQty(${index}, 1)">+</button>
+                <button onclick="changeQty(${index}, -1)">-</button>
+                <button onclick="removeItem(${index})">Remove</button>
+              </div>
             </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        })
+        .join("");
 
-      cartTotal.innerText = 'Total: ₹' + total;
+      cartTotal.innerText = "Total: ₹" + total;
     }
 
     function changeQty(index, delta) {
       cart[index].qty += delta;
       if (cart[index].qty < 1) cart[index].qty = 1;
-      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem("cart", JSON.stringify(cart));
       displayCart();
-      updateCartCount();
     }
 
     function removeItem(index) {
       cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem("cart", JSON.stringify(cart));
       displayCart();
-      updateCartCount();
     }
 
-    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+    document.getElementById("checkoutForm").addEventListener("submit", function (e) {
       e.preventDefault();
-
       const order = {
-        name: document.getElementById('name').value,
-        address: document.getElementById('address').value,
-        phone: document.getElementById('phone').value,
-        items: cart,
-        time: new Date().toLocaleString()
+        name: document.getElementById("name").value,
+        address: document.getElementById("address").value,
+        phone: document.getElementById("phone").value,
+        cart,
+        date: new Date().toLocaleString()
       };
+      console.log("Order Summary:", order);
 
-      let orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders.push(order);
-      localStorage.setItem('orders', JSON.stringify(orders));
-
-      alert('Order placed successfully!');
-      localStorage.removeItem('cart');
-      updateCartCount();
-      window.location.href = 'products.html';
+      alert("Order placed successfully!");
+      localStorage.removeItem("cart");
+      window.location.href = "products.html";
     });
+
+    function printInvoice() {
+      window.print();
+    }
 
     displayCart();
   </script>

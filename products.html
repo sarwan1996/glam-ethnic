@@ -5,25 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Glam Ethnic - Products</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    nav a.active {
+      font-weight: bold;
+      color: #d63384;
+    }
+  </style>
 </head>
 <body>
   <header>
     <h1>Glam Ethnic</h1>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="products.html?category=saree">Sarees</a>
-      <a href="products.html?category=chudi">Chudi</a>
+      <a href="index.html" id="nav-home">Home</a>
+      <a href="products.html?category=saree" id="nav-saree">Sarees</a>
+      <a href="products.html?category=chudi" id="nav-chudi">Chudi</a>
       <a href="cart.html">Cart <span id="cart-count">0</span></a>
     </nav>
   </header>
 
-  <main class="products" id="product-list"></main>
+  <main class="products" id="product-list">
+    <p>Loading products...</p>
+  </main>
 
   <footer>
     <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
   </footer>
 
+  <!-- Shared cart logic -->
   <script src="script.js"></script>
+
+  <!-- Product filtering script -->
   <script>
     const allProducts = [
       {
@@ -76,9 +87,20 @@
       `).join('');
     }
 
+    function highlightNav(category) {
+      if (category === 'saree') {
+        document.getElementById('nav-saree')?.classList.add('active');
+      } else if (category === 'chudi') {
+        document.getElementById('nav-chudi')?.classList.add('active');
+      } else {
+        document.getElementById('nav-home')?.classList.add('active');
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const category = getCategoryFromURL();
       renderProducts(category);
+      highlightNav(category);
     });
   </script>
 </body>

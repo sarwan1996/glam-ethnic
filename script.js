@@ -1,42 +1,54 @@
-const products = [
-  { title: 'Silk Saree', price: 1499, image: 'images/saree1.jpg', category: 'saree' },
-  { title: 'Floral Ruffle Saree', price: 1899, image: 'images/saree2.jpg', category: 'saree' },
-  { title: 'Designer Chudi', price: 999, image: 'images/chudi1.jpg', category: 'chudi' },
-  { title: 'Cotton Chudi Set', price: 799, image: 'images/chudi2.jpg', category: 'chudi' }
-];
+function renderProducts(category, limit, targetId) {
+  const products = [
+    {
+      title: "Silk Saree",
+      price: 1499,
+      image: "images/silk.jpg",
+      category: "saree"
+    },
+    {
+      title: "Floral Ruffle Saree",
+      price: 1899,
+      image: "images/floral.jpg",
+      category: "saree"
+    },
+    {
+      title: "Chudi Set",
+      price: 1299,
+      image: "images/chudi.jpg",
+      category: "chudi"
+    }
+  ];
 
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const container = document.getElementById(targetId);
+  const filtered = products.filter(p => p.category === category).slice(0, limit);
 
-function addToCart(productTitle) {
-  const item = products.find(p => p.title === productTitle);
-  const existing = cart.find(p => p.title === productTitle);
+  container.innerHTML = filtered.map(p => `
+    <div class="product-card">
+      <img src="${p.image}" alt="${p.title}">
+      <h4>${p.title}</h4>
+      <p>₹${p.price}</p>
+      <button onclick="addToCart('${p.title}', ${p.price}, '${p.image}')">Add to Cart</button>
+    </div>
+  `).join('');
+}
+
+function addToCart(title, price, image) {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const existing = cart.find(item => item.title === title);
   if (existing) {
     existing.qty += 1;
   } else {
-    cart.push({ ...item, qty: 1 });
+    cart.push({ title, price, image, qty: 1 });
   }
   localStorage.setItem('cart', JSON.stringify(cart));
   updateCartCount();
 }
 
 function updateCartCount() {
-  const count = cart.reduce((acc, cur) => acc + cur.qty, 0);
-  const el = document.getElementById('cart-count');
-  if (el) el.innerText = count;
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const count = cart.reduce((acc, item) => acc + item.qty, 0);
+  document.getElementById('cart-count').innerText = count;
 }
 
-document.addEventListener('DOMContentLoaded', updateCartCount);
-
-function renderProducts(category, limit = null, containerId = 'product-list') {
-  const container = document.getElementById(containerId);
-  const filtered = category ? products.filter(p => p.category === category) : products;
-  const display = limit ? filtered.slice(0, limit) : filtered;
-  container.innerHTML = display.map(p => `
-    <div class="product-card">
-      <img src="${p.image}" alt="${p.title}">
-      <h3>${p.title}</h3>
-      <p>₹${p.price}</p>
-      <button onclick="addToCart('${p.title}')">Add to Cart</button>
-    </div>
-  `).join('');
-}
+updateCartCount();

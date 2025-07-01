@@ -1,0 +1,59 @@
+<!-- products.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Glam Ethnic - Products</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Glam Ethnic</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Our Collection</h2>
+    <div id="productDisplay" class="product-grid"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const productDisplay = document.getElementById('productDisplay');
+
+    function loadProducts() {
+      const products = JSON.parse(localStorage.getItem('products')) || [];
+      productDisplay.innerHTML = '';
+
+      products.forEach((product, index) => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <img src="${product.image}" alt="${product.title}" width="150">
+          <h3>${product.title}</h3>
+          <p>₹${product.price}</p>
+          <p>Category: ${product.category}</p>
+          <button onclick="addToCart(${index})">Add to Cart</button>
+        `;
+        productDisplay.appendChild(div);
+      });
+    }
+
+    function addToCart(index) {
+      const products = JSON.parse(localStorage.getItem('products')) || [];
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push(products[index]);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Added to cart!');
+    }
+
+    loadProducts();
+  </script>
+</body>
+</html>

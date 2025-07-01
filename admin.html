@@ -1,0 +1,126 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Glam Ethnic</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Admin Panel - Glam Ethnic</h1>
+  </header>
+
+  <main class="admin">
+    <div id="loginSection">
+      <h2>Admin Login</h2>
+      <form id="loginForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <div id="adminPanel" style="display: none;">
+      <h2>Add New Product</h2>
+      <form id="productForm">
+        <label for="title">Product Name:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="price">Price (₹):</label>
+        <input type="number" id="price" name="price" required>
+
+        <label for="category">Category:</label>
+        <select id="category">
+          <option value="saree">Saree</option>
+          <option value="chudi">Chudi</option>
+        </select>
+
+        <label for="image">Upload Image:</label>
+        <input type="file" id="image" accept="image/*" required>
+
+        <button type="submit">Add Product</button>
+      </form>
+
+      <h2>Product List</h2>
+      <div id="productList"></div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const loginSection = document.getElementById('loginSection');
+    const adminPanel = document.getElementById('adminPanel');
+
+    const adminEmail = 'admin@glamethnic.com';
+    const adminPassword = '1234';
+
+    loginForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (email === adminEmail && password === adminPassword) {
+        loginSection.style.display = 'none';
+        adminPanel.style.display = 'block';
+        displayProducts();
+      } else {
+        alert('Invalid credentials!');
+      }
+    });
+
+    const productForm = document.getElementById('productForm');
+    const productList = document.getElementById('productList');
+
+    productForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const title = document.getElementById('title').value;
+      const price = document.getElementById('price').value;
+      const category = document.getElementById('category').value;
+      const imageFile = document.getElementById('image').files[0];
+
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        products.push({ title, price, category, image: reader.result });
+        localStorage.setItem('products', JSON.stringify(products));
+        displayProducts();
+        productForm.reset();
+      };
+      reader.readAsDataURL(imageFile);
+    });
+
+    function displayProducts() {
+      const products = JSON.parse(localStorage.getItem('products')) || [];
+      productList.innerHTML = '';
+      products.forEach((product, index) => {
+        const div = document.createElement('div');
+        div.className = 'product-item';
+        div.innerHTML = `
+          <img src="${product.image}" alt="${product.title}" width="100">
+          <h3>${product.title}</h3>
+          <p>₹${product.price}</p>
+          <p>Category: ${product.category}</p>
+          <button onclick="deleteProduct(${index})">Delete</button>
+        `;
+        productList.appendChild(div);
+      });
+    }
+
+    function deleteProduct(index) {
+      const products = JSON.parse(localStorage.getItem('products')) || [];
+      products.splice(index, 1);
+      localStorage.setItem('products', JSON.stringify(products));
+      displayProducts();
+    }
+  </script>
+</body>
+</html>

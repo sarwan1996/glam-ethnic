@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Glam Ethnic - Cart</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
     <h1>Your Cart</h1>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="products.html">Shop</a>
-      <a href="cart.html">Cart <span id="cart-count">0</span></a>
+      <a href="products.html">Back to Shop</a>
     </nav>
   </header>
 
   <main>
     <div id="cartItems"></div>
+    <h3 id="cartTotal">Total: ₹0</h3>
 
     <h2>Shipping Information</h2>
     <form id="checkoutForm">
@@ -37,71 +36,62 @@
     <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
   </footer>
 
+  <script src="script.js"></script>
   <script>
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     const cartItemsDiv = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
 
     function displayCart() {
-      updateCartCount();
-
       if (cart.length === 0) {
         cartItemsDiv.innerHTML = '<p>Your cart is empty.</p>';
+        cartTotal.innerText = 'Total: ₹0';
         return;
       }
 
+      let total = 0;
       cartItemsDiv.innerHTML = cart.map((item, index) => {
-        if (typeof item === 'string') {
-          return `
-            <div class="cart-item">
-              <p><strong>${item}</strong></p>
-              <button onclick="removeFromCart(${index})">Remove</button>
-            </div>
-          `;
-        }
-
+        total += item.price * item.qty;
         return `
           <div class="cart-item">
             <img src="${item.image || 'images/default.jpg'}" alt="${item.title}" width="80">
             <div>
               <h4>${item.title}</h4>
-              <p>₹${item.price}</p>
-              <button onclick="removeFromCart(${index})">Remove</button>
+              <p>₹${item.price} x ${item.qty}</p>
+              <button onclick="changeQty(${index}, 1)">+</button>
+              <button onclick="changeQty(${index}, -1)">-</button>
+              <button onclick="removeItem(${index})">Remove</button>
             </div>
           </div>
         `;
       }).join('');
+
+      cartTotal.innerText = 'Total: ₹' + total;
     }
 
-    function removeFromCart(index) {
+    function changeQty(index, delta) {
+      cart[index].qty += delta;
+      if (cart[index].qty < 1) cart[index].qty = 1;
+      localStorage.setItem('cart', JSON.stringify(cart));
+      displayCart();
+      updateCartCount();
+    }
+
+    function removeItem(index) {
       cart.splice(index, 1);
       localStorage.setItem('cart', JSON.stringify(cart));
       displayCart();
-    }
-
-    function updateCartCount() {
-      const count = cart.length;
-      const el = document.getElementById('cart-count');
-      if (el) el.innerText = count;
+      updateCartCount();
     }
 
     document.getElementById('checkoutForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      if (cart.length === 0) {
-        alert('Your cart is empty!');
-        return;
-      }
-
       alert('Order placed successfully!');
       localStorage.removeItem('cart');
-      cart = [];
-      updateCartCount();
-      displayCart();
       window.location.href = 'products.html';
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      displayCart();
-    });
+    displayCart();
   </script>
 </body>
 </html>

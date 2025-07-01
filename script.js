@@ -1,4 +1,5 @@
-let cart = [];
+// script.js
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 function addToCart(product) {
   cart.push(product);
@@ -7,8 +8,13 @@ function addToCart(product) {
 }
 
 function updateCartCount() {
-  const count = JSON.parse(localStorage.getItem('cart'))?.length || 0;
-  document.getElementById('cart-count').innerText = count;
+  const count = cart.length;
+  const el = document.getElementById('cart-count');
+  if (el) el.innerText = count;
 }
 
-document.addEventListener('DOMContentLoaded', updateCartCount);
+document.addEventListener('DOMContentLoaded', () => {
+  updateCartCount();
+
+  // Optional: delegate nav clicks if you want to intercept links
+});

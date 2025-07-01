@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Products - Glam Ethnic</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glam Ethnic - Products</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Our Products</h1>
+    <h1>Glam Ethnic Products</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="products.html?category=saree">Sarees</a>
@@ -15,13 +16,19 @@
       <a href="cart.html">Cart <span id="cart-count">0</span></a>
     </nav>
   </header>
-
-  <main class="products" id="productList"></main>
-
+  <main>
+    <h2 id="category-heading"></h2>
+    <div id="product-list" class="product-grid"></div>
+  </main>
   <footer>
-    <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
+    <p>&copy; 2025 Glam Ethnic</p>
   </footer>
-
   <script src="script.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const category = params.get('category');
+    document.getElementById('category-heading').innerText = category ? category.toUpperCase() : 'All Products';
+    renderProducts(category);
+  </script>
 </body>
 </html>

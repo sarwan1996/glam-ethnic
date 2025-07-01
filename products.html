@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Glam Ethnic - Products</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Products - Glam Ethnic</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Glam Ethnic</h1>
+    <h1>Our Products</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="products.html?category=saree">Sarees</a>
@@ -16,34 +16,12 @@
     </nav>
   </header>
 
-  <main id="productList" class="products"></main>
+  <main class="products" id="productList"></main>
 
   <footer>
     <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
   </footer>
 
   <script src="script.js"></script>
-  <script>
-    const allProducts = [
-      { title: "Silk Saree", price: 1499, image: "images/saree1.jpg", category: "saree" },
-      { title: "Floral Ruffle Saree", price: 1899, image: "images/saree2.jpg", category: "saree" },
-      { title: "Designer Chudi", price: 999, image: "images/chudi1.jpg", category: "chudi" },
-      { title: "Cotton Chudi Set", price: 799, image: "images/chudi2.jpg", category: "chudi" }
-    ];
-
-    const params = new URLSearchParams(window.location.search);
-    const category = params.get("category");
-    const filtered = category ? allProducts.filter(p => p.category === category) : allProducts;
-
-    const container = document.getElementById("productList");
-    container.innerHTML = filtered.map(p => `
-      <div class="product-card">
-        <img src="${p.image}" alt="${p.title}">
-        <h3>${p.title}</h3>
-        <p>₹${p.price}</p>
-        <button onclick="addToCart('${p.title}', ${p.price}, '${p.image}')">Add to Cart</button>
-      </div>
-    `).join('');
-  </script>
 </body>
 </html>

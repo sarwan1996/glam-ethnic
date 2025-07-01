@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Invoice - Glam Ethnic</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .invoice {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #fff;
+      border: 1px solid #ccc;
+    }
+
+    .invoice h1 {
+      text-align: center;
+    }
+
+    .invoice table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .invoice th, .invoice td {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      text-align: left;
+    }
+
+    .invoice-summary {
+      text-align: right;
+      margin-top: 1rem;
+    }
+
+    .invoice button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #60003b;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .invoice button:hover {
+      background-color: #80004d;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice">
+    <h1>Glam Ethnic Invoice</h1>
+    <table id="invoice-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="invoice-summary">
+      <h3>Grand Total: ₹<span id="grand-total">0</span></h3>
+      <button onclick="window.print()">Print</button>
+    </div>
+  </div>
+
+  <script>
+    const tableBody = document.querySelector("#invoice-table tbody");
+    const totalDisplay = document.getElementById("grand-total");
+
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let total = 0;
+    tableBody.innerHTML = cart.map(item => {
+      const lineTotal = item.price * item.qty;
+      total += lineTotal;
+      return `
+        <tr>
+          <td>${item.title}</td>
+          <td>${item.qty}</td>
+          <td>₹${item.price}</td>
+          <td>₹${lineTotal}</td>
+        </tr>
+      `;
+    }).join("");
+    totalDisplay.textContent = total;
+  </script>
+</body>
+</html>

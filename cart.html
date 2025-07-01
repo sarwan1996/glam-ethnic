@@ -1,30 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Glam Ethnic - Cart</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .cart-item {
-      display: flex;
-      gap: 10px;
-      margin: 10px 0;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 10px;
-    }
-    .cart-item img {
-      width: 80px;
-      height: auto;
-      object-fit: cover;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <h1>Your Cart</h1>
     <nav>
       <a href="index.html">Home</a>
-      <a href="products.html">Back to Shop</a>
+      <a href="products.html">Shop</a>
+      <a href="cart.html">Cart <span id="cart-count">0</span></a>
     </nav>
   </header>
 
@@ -51,47 +38,70 @@
   </footer>
 
   <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
     const cartItemsDiv = document.getElementById('cartItems');
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     function displayCart() {
+      updateCartCount();
+
       if (cart.length === 0) {
         cartItemsDiv.innerHTML = '<p>Your cart is empty.</p>';
         return;
       }
 
-      cartItemsDiv.innerHTML = cart.map(item => {
-        // Handle old cart format (just a string)
+      cartItemsDiv.innerHTML = cart.map((item, index) => {
         if (typeof item === 'string') {
           return `
             <div class="cart-item">
               <p><strong>${item}</strong></p>
+              <button onclick="removeFromCart(${index})">Remove</button>
             </div>
           `;
         }
 
-        // Handle new format (object with details)
         return `
           <div class="cart-item">
-            <img src="${item.image || 'images/default.jpg'}" alt="${item.title}">
+            <img src="${item.image || 'images/default.jpg'}" alt="${item.title}" width="80">
             <div>
               <h4>${item.title}</h4>
               <p>₹${item.price}</p>
-              <p>Quantity: ${item.quantity || 1}</p>
+              <button onclick="removeFromCart(${index})">Remove</button>
             </div>
           </div>
         `;
       }).join('');
     }
 
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      displayCart();
+    }
+
+    function updateCartCount() {
+      const count = cart.length;
+      const el = document.getElementById('cart-count');
+      if (el) el.innerText = count;
+    }
+
     document.getElementById('checkoutForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      alert('✅ Order placed successfully!');
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+
+      alert('Order placed successfully!');
       localStorage.removeItem('cart');
+      cart = [];
+      updateCartCount();
+      displayCart();
       window.location.href = 'products.html';
     });
 
-    displayCart();
+    document.addEventListener('DOMContentLoaded', () => {
+      displayCart();
+    });
   </script>
 </body>
 </html>

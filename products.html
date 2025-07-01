@@ -1,56 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Glam Ethnic - Products</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <h1>Glam Ethnic</h1>
     <nav>
       <a href="index.html">Home</a>
+      <a href="products.html?category=saree">Sarees</a>
+      <a href="products.html?category=chudi">Chudi</a>
       <a href="cart.html">Cart <span id="cart-count">0</span></a>
     </nav>
   </header>
 
-  <main>
-    <h2>Our Collection</h2>
-    <div id="productDisplay" class="product-grid"></div>
+  <section class="hero">
+    <h2>Elegant Ethnic Wear for Every Occasion</h2>
+    <p>Explore our collection of sarees and chudi suits</p>
+  </section>
+
+  <main class="products">
+    <div class="product-card">
+      <img src="images/saree1.jpg" alt="Silk Saree">
+      <h3>Silk Saree</h3>
+      <p>₹1,499</p>
+      <button onclick="addToCart('Silk Saree', 1499, 'images/saree1.jpg')">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/saree2.jpg" alt="Floral Ruffle Saree">
+      <h3>Floral Ruffle Saree</h3>
+      <p>₹1,899</p>
+      <button onclick="addToCart('Floral Ruffle Saree', 1899, 'images/saree2.jpg')">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/chudi1.jpg" alt="Designer Chudi">
+      <h3>Designer Chudi</h3>
+      <p>₹999</p>
+      <button onclick="addToCart('Designer Chudi', 999, 'images/chudi1.jpg')">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/chudi2.jpg" alt="Cotton Chudi Set">
+      <h3>Cotton Chudi Set</h3>
+      <p>₹799</p>
+      <button onclick="addToCart('Cotton Chudi Set', 799, 'images/chudi2.jpg')">Add to Cart</button>
+    </div>
   </main>
 
   <footer>
     <p>&copy; 2025 Glam Ethnic. All rights reserved.</p>
   </footer>
 
-  <script>
-    const productDisplay = document.getElementById('productDisplay');
-
-    function loadProducts() {
-      const products = JSON.parse(localStorage.getItem('products')) || [];
-      productDisplay.innerHTML = '';
-
-      products.forEach((product) => {
-        const div = document.createElement('div');
-        div.className = 'product';
-        div.innerHTML = `
-          <img src="${product.image}" alt="${product.title}" width="150">
-          <h3>${product.title}</h3>
-          <p>₹${product.price}</p>
-          <p>Category: ${product.category}</p>
-          <button onclick="addToCart('Silk Saree', 1499, 'images/saree1.jpg')">Add to Cart</button>
-        `;
-        productDisplay.appendChild(div);
-      });
-    }
-  </script>
-
-  <!-- Shared script for cart count and logic -->
   <script src="script.js"></script>
-
-  <!-- Load products after all scripts -->
-  <script>
-    document.addEventListener('DOMContentLoaded', loadProducts);
-  </script>
 </body>
 </html>

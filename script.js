@@ -2,19 +2,25 @@ const products = [
   {
     title: "Silk Saree",
     price: 1499,
-    image: "images/silk.jpg",
+    image: "images/saree1.jpg",
     category: "saree"
   },
   {
     title: "Floral Ruffle Saree",
     price: 1899,
-    image: "images/floral.jpg",
+    image: "images/saree2.jpg",
     category: "saree"
   },
   {
     title: "Printed Cotton Chudi",
     price: 1299,
-    image: "images/chudi.jpg",
+    image: "images/chudi1.jpg",
+    category: "chudi"
+  }
+  {
+    title: "Printed Cotton Chudi",
+    price: 1299,
+    image: "images/chudi2.jpg",
     category: "chudi"
   }
 ];

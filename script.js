@@ -25,37 +25,33 @@ const products = [
   }
 ];
 
-function renderProducts(category, limit, targetId) {
-  const container = document.getElementById(targetId);
-  const filtered = products.filter(p => p.category === category);
-  const selected = limit ? filtered.slice(0, limit) : filtered;
+function renderProducts(category, filter, containerId) {
+  fetch("products.json")
+    .then(res => res.json())
+    .then(products => {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
 
-  container.innerHTML = selected.map(p => `
-    <div class="product-card">
-      <img src="${p.image}" alt="${p.title}">
-      <h4>${p.title}</h4>
-      <p>₹${p.price}</p>
-      <button onclick="addToCart('${p.title}', ${p.price}, '${p.image}')">Add to Cart</button>
-    </div>
-  `).join('');
+      const filtered = products.filter(
+        product => product.category === category
+      );
+
+      filtered.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" />
+          <h4>${product.name}</h4>
+          <p>$${product.price.toFixed(2)}</p>
+          <button data-id="${product.id}">Add to Cart</button>
+        `;
+        container.appendChild(card);
+      });
+    })
+    .catch(err => {
+      console.error("Error loading products:", err);
+    });
 }
 
-function addToCart(title, price, image) {
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const existing = cart.find(item => item.title === title);
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ title, price, image, qty: 1 });
-  }
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount();
-}
-
-function updateCartCount() {
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const count = cart.reduce((acc, item) => acc + item.qty, 0);
-  document.getElementById("cart-count").innerText = count;
-}
-
-updateCartCount();
+// Make available globally
+window.renderProducts = renderProducts;
